@@ -1,0 +1,33 @@
+/*
+ natural(Numero)
+ Es cierto cuando Numero unifica con un número natural
+ 
+ natural(1). => Indica que el primero es 1, y que es 
+				verdad que natural(1) es verdad.
+				
+ natural(n-1) -> natural(n) => Así se escribe normalmente
+							   en otros tipos de codigo
+							   
+ natural(N) :- N > 1, N2 is N-1, natural(N2).
+ Si N es menor que 1 return false, si N-1 no es natural,
+ return false. Resto return true.
+*/
+
+/*
+ Principio de Inducción Matemático
+ 
+ Sea S un conjunto ordenable.
+ 
+ Sea n0 el elemento más pequeño de S.
+ 
+ Quiero demostrar que la propiedad P se cumple para todo
+ elemento del conjunto S.
+ 
+ 1. P es cierta para n0.
+ 2. Para todo elemento mayor que n0, si P(n-1) es cierto, 
+    también lo será P(n).
+ 
+*/
+
+ natural(1).
+ natural(N) :- N > 1, N2 is N-1, natural(N2).
