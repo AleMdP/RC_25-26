@@ -10,4 +10,4 @@ Principio de inducción
 */
 
 num_elem([], 0).
-num_elem(n) :- num_elem(n-1).
+num_elem([_|Resto], R2) :- num_elem(Resto, R), R2 is R+1.).
