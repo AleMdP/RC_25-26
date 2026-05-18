@@ -14,6 +14,11 @@ requirements(Rs):- Goal = class_subject_teacher_times(Class, Subject, Teacher, N
 				   setof(req(Class, Subject, Teacher, Number), Goal, Rs0),
 				   maplist(req_with_slots, Rs0, Rs).
 
+/*
+class_subject_teacher_times('1a', deu, sjk1, 4).
+req('1a', deu, sjk1, 4)-[_,_,_,_]
+*/
+
 req_with_slots(R, R-Slots):- R = req(_, _, _, N), length(Slots, N).
 
 
@@ -26,25 +31,14 @@ requirements_variables(Rs, Vars):- requirements(Rs),
 								   slots_per_week(SPW),
 								   Max #= SPW - 1,
 								   Vars ins 0..Max,
-								   maplist(constrain_subject, Rs),
-								   classes(Classes),
-								   teachers(Teachers),
-								   rooms(Rooms),
-								   maplist(constrain_teacher(Rs), Teachers),
-								   maplist(constrain_class(Rs), Classes),
-								   maplist(constrain_rooms(Rs), Rooms),
+								   maplist(constrain_subject, Rs).
 
 pairs_slots(Ps, Vs):- pairs_values(Ps, Vs0),
 					  append(Vs0, Vs).
 
-constrain_subject(req(Class, Subj, _Teacher, _Num)-Slots):- strictly_ascending(Slots),
+constrain_subject(req(Class, Subj, _Teacher, _Num)-Slots):- strictly_ascending(Slots), % break symmetry
 															maplist(slot_quotient, Slots, Qs0),
-															findall(F-S, coupling(Class, Subj, F, S), Cs),
-															maplist(slots_couplings(Slots), Cs),
-															pairs_values(Cs, Seconds0),
-															sort(Seconds0, Seconds),
-															list_without_nths(Qs0, Seconds, Qs),
-															strictly_ascending(Qs).
+															strictly_ascending(Qs0).
 
 strictly_ascending(Ls):- chain(Ls, #<).
 /*
@@ -55,3 +49,25 @@ chain([A,B,C], #<).
 
 slot_quotient(S, Q):- slots_per_day(SPD),
 					  Q #= S // SPD.
+
+constrain_teacher(Rs, Teacher):- mi_tfilter(Teacher, Rs, Sub),
+								 pairs_slots(Sub, Vs),
+								 all_different(Vs).
+
+teacher_req(T0, req(_C, _S, T1, _N)-_, T):- =(T0, T1, T).
+
+
+constrain_class(Rs, Class):- mi_tfilter
+
+/*
+mi_tfilter(+Teacher, +Rs, -Sub).
+	Es cierto si Sub unifica con una lista de requisitos del profesor Teacher.
+*/
+
+mi_tfilter(_, [], []).
+
+mi_tfilter(Teacher, [req(C, S, Teacher, N)-Slot|Tail], [req(C, S, Teacher, N)-Slot|Rs]):- 
+																mi_tfilter(Teacher, Tail, Rs).
+
+mi_tfilter(Teacher, [req(C, S, Teacher2, N)-Slot|Tail], Rs:- Teacher \= Teacher2,
+															 mi_tfilter(Teacher, Tail, Rs).
