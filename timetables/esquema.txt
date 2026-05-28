@@ -10,16 +10,16 @@ Esquema timetable
 - 4. Aplano la matriz irregular -> Vars ins 0 .. SPD - 1
 
 - 5. Obtengo la lista de profesores y la lista de asignaturas -> C^S^N^setof(Teacher, Req, Teachers)
-															   T^S^N^setof(Class, Req, Classes)
+																 T^S^N^setof(Class, Req, Classes)
 
 - 6. Aplico restricciones por fila (Asignatura)
 	- 6.1. Los numeros de los Slots de una asignatura tiene que ser estrictamente ascendente
 	- 6.2. Los numeros de los Slots de una asignatura division entera SPD (7) tienen que ser estrictamente ascendente
 
 - 7. Restricciones por Profesor -> Filtrar para un profesor todos sus req( , , , )-Slots, pair_values y 
-									append para aplanar y digo que todas las variables de la lista tienen 
-									que ser all_distinct
+								   append para aplanar y digo que todas las variables de la lista tienen 
+								   que ser all_distinct
 
 - 8. Restricciones por Grupo(Class) -> Filtrar para un grupo todos sus req( , , , )-Slots, pair_values y 
-										append para aplanar y digo que todas las variables de la lista tienen 
-										que ser all_distinct
+									   append para aplanar y digo que todas las variables de la lista tienen 
+									   que ser all_distinct
