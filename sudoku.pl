@@ -41,8 +41,8 @@ sudoku(Rows), maplist(label, Rows), maplist(portray_clause, Rows).
 
 sudoku(Rows):- length(Rows, 9),
 			   maplist(same_length(Rows), Rows),
-			   append(Rows, Vs), //aplana la matriz
-			   Vs ins 1..9, //indica el dominio de cada posicion (0-9)
+			   append(Rows, Vs), /*aplana la matriz */
+			   Vs ins 1..9, /*indica el dominio de cada posicion (0-9) */
 			   maplist(all_distinct, Rows),
 			   transpose(Rows, Columns),
 			   maplist(all_distinct, Columns),
