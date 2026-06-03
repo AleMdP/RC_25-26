@@ -26,9 +26,10 @@ classes(Classes):- setof(C, S^N^T^class_subject_teacher_times(C,S,T,N), Classes)
 
 teachers(Teachers):- setof(T, C^S^N^class_subject_teacher_times(C,S,T,N), Teachers).
 
+/*
 rooms(Rooms):- findall(Room, room_alloc(Room,_C,_S,_Slot), Rooms0),
 			   sort(Rooms0, Rooms).
-
+*/
 requirements_variables(Rs, Vars):- requirements(Rs),
 								   pairs_slots(Rs, Vars),
 								   slots_per_week(SPW),
@@ -37,15 +38,18 @@ requirements_variables(Rs, Vars):- requirements(Rs),
 								   maplist(constrain_subject, Rs),
 								   classes(Classes),
 								   teachers(Teachers),
-								   rooms(Rooms),
+								   %rooms(Rooms),
 								   maplist(constrain_teacher(Rs), Teachers),
 								   maplist(constrain_class(Rs), Classes),
-								   maplist(constrain_room(Rs), Rooms).
+								   %maplist(constrain_room(Rs), Rooms).
 
 pairs_slots(Ps, Vs):- pairs_values(Ps, Vs0),
 					  append(Vs0, Vs).
 
-constrain_subject(req(Class, Subj, _Teacher, _Num)-Slots):- strictly_ascending(Slots), % break symmetry
+constrain_subject(req(Class, Subj, _Teacher, _Num)-Slots):- strictly_ascending(Slots), /* all_distinct + ordenar
+																						no deja que haya más de
+																						una asignatura en la 
+																						misma posicion */
 															maplist(slot_quotient, Slots, Qs0),
 															%findall(F-S, coupling(Class, Subj, F, S), Cs),
 															%maplist(slots_coupling(Slots), Cs),
@@ -73,8 +77,9 @@ constrain_teacher(Rs, Teacher):- mi_tfilter(Teacher, Rs, Sub),
 
 teacher_req(T0, req(_C, _S, T1, _N)-_, T):- =(T0, T1, T).
 
-
-constrain_class(Rs, Class):- mi_tfilter
+constrain_class(Rs, Class):- mi_tfilter(Class, Rs, Sub),
+							 pairs_slots(Sub, Vs),
+							 all_different(Vs),
 
 /*
 mi_tfilter(+Teacher, +Rs, -Sub).
