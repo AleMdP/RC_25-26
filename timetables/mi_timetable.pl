@@ -70,18 +70,18 @@ slot_quotient(S, Q):- slots_per_day(SPD),
 
 constrain_teacher(Rs, Teacher):- mi_tfilter(Teacher, Rs, Sub),
 								 pairs_slots(Sub, Vs),
-								 all_different(Vs),
-								 findall(F, teacher_freeday(Teacher, F), Fs),
-								 maplist(slot_quotient, Vs, Qs),
-								 maplist(all_dif_from(Qs), Fs).
+								 all_different(Vs).
+								 %findall(F, teacher_freeday(Teacher, F), Fs),
+								 %maplist(slot_quotient, Vs, Qs),
+								 %maplist(all_dif_from(Qs), Fs).
 
 teacher_req(T0, req(_C, _S, T1, _N)-_, T):- =(T0, T1, T).
 
-constrain_class(Rs, Class):- mi_tfilter(Class, Rs, Sub),
+constrain_class(Rs, Class):- tfilter(Class, Rs, Sub),
 							 pairs_slots(Sub, Vs),
-							 all_different(Vs),
+							 all_different(Vs).
 
-/*
+/* LO IMPLEMENTAMOS PARA SABER COMO SE USABA, PERO SE PUEDE USAR TFILTER SIN MAS
 mi_tfilter(+Teacher, +Rs, -Sub).
 	Es cierto si Sub unifica con una lista de requisitos del profesor Teacher.
 */
