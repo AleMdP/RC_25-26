@@ -56,7 +56,7 @@ constrain_subject(req(Class, Subj, _Teacher, _Num)-Slots):- strictly_ascending(S
 															%pairs_values(Cs, Seconds0),
 															%sort(Seconds0, Seconds),
 															%list_without_nths(Qs0, Seconds, Qs),
-															strictly_ascending(Qs).
+															strictly_ascending(Qs0).
 
 strictly_ascending(Ls):- chain(Ls, #<).
 /*
@@ -75,7 +75,7 @@ constrain_teacher(Rs, Teacher):- mi_tfilter(Teacher, Rs, Sub),
 								 %maplist(slot_quotient, Vs, Qs),
 								 %maplist(all_dif_from(Qs), Fs).
 
-teacher_req(T0, req(_C, _S, T1, _N)-_, T):- =(T0, T1, T).
+%teacher_req(T0, req(_C, _S, T1, _N)-_, T):- =(T0, T1, T).
 
 constrain_class(Rs, Class):- tfilter(Class, Rs, Sub),
 							 pairs_slots(Sub, Vs),
